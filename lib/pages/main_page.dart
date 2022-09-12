@@ -1,5 +1,5 @@
 import 'dart:js';
-
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatelessWidget {
@@ -10,9 +10,14 @@ class MainPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
-          "What will you do today?",
-          style: TextStyle(color: Colors.black),
+        title: GestureDetector(
+          onTap: () {
+            _showAddTaskBottom(context);
+          },
+          child: Text(
+            "What will you do today?",
+            style: TextStyle(color: Colors.black),
+          ),
         ),
         centerTitle: false,
         actions: [
@@ -44,6 +49,13 @@ class MainPage extends StatelessWidget {
                 decoration: InputDecoration(
                     hintText: "What is it you want to do?",
                     border: InputBorder.none),
+                onSubmitted: (value) {
+                  Navigator.of(context).pop();
+                  if (value.length > 2) {
+                    DatePicker.showTimePicker(context,
+                        showSecondsColumn: false,onConfirm: (time){});
+                  }
+                },
               ),
             ),
           );
