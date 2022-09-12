@@ -1,6 +1,7 @@
 import 'dart:js';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_to_do_list_app/models/task_model.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -52,8 +53,11 @@ class MainPage extends StatelessWidget {
                 onSubmitted: (value) {
                   Navigator.of(context).pop();
                   if (value.length > 2) {
-                    DatePicker.showTimePicker(context,
-                        showSecondsColumn: false,onConfirm: (time){});
+                    DatePicker.showTimePicker(context, showSecondsColumn: false,
+                        onConfirm: (time) {
+                      var newAddToBeTask =
+                          Task.create(name: value, createdAt: time);
+                    });
                   }
                 },
               ),
