@@ -52,24 +52,25 @@ class _MainPageState extends State<MainPage> {
                 itemBuilder: (context, index) {
                   var _listEleman = _allTaks[index];
                   return Dismissible(
-                    background: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                        SizedBox(width: 6),
-                        Text("Task Deleted"),
-                      ],
-                    ),
-                    key: Key(_listEleman.id),
-                    onDismissed: (direction) {
-                      _allTaks.remove(index);
-                      setState(() {});
-                    },
-                    child: TaskItem(task: _listEleman,)
-                  );
+                      background: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 6),
+                          Text("Task Deleted"),
+                        ],
+                      ),
+                      key: Key(_listEleman.id),
+                      onDismissed: (direction) {
+                        _allTaks.remove(index);
+                        setState(() {});
+                      },
+                      child: TaskItem(
+                        task: _listEleman,
+                      ));
                 },
                 itemCount: _allTaks.length,
               )
@@ -88,6 +89,7 @@ class _MainPageState extends State<MainPage> {
             width: MediaQuery.of(context).size.width,
             child: ListTile(
               title: TextField(
+                autofocus: true,
                 style: TextStyle(fontSize: 21),
                 decoration: InputDecoration(
                     hintText: "What is it you want to do?",
