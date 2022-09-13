@@ -2,6 +2,7 @@ import 'dart:js';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_to_do_list_app/models/task_model.dart';
+import 'package:flutter_to_do_list_app/widgets/task_list_item.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -67,10 +68,7 @@ class _MainPageState extends State<MainPage> {
                       _allTaks.remove(index);
                       setState(() {});
                     },
-                    child: ListTile(
-                      title: Text(_listEleman.name + " " + _listEleman.id),
-                      subtitle: Text(_listEleman.createdAt.toString()),
-                    ),
+                    child: TaskItem(task: _listEleman,)
                   );
                 },
                 itemCount: _allTaks.length,
