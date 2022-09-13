@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_to_do_list_app/models/task_model.dart';
+import 'package:intl/intl.dart';
 
 class TaskItem extends StatefulWidget {
   Task task;
@@ -11,36 +12,63 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
+  TextEditingController _taskNameController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _taskNameController.text = widget.task.name;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 11),
-          ],
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 11),
+        ],
+      ),
+      child: ListTile(
+        leading: GestureDetector(
+          onTap: () {
+            widget.task.isCompleted = !widget.task.isCompleted;
+            setState(() {});
+          },
+          child: Container(
+            child: Icon(Icons.check),
+            decoration: BoxDecoration(
+                color: widget.task.isCompleted ? Colors.green : Colors.white,
+                border: Border.all(color: Colors.grey, width: 0.7),
+                shape: BoxShape.circle),
+          ),
         ),
-        child: ListTile(
-          leading: GestureDetector(
-            onTap: () {
-              widget.task.isCompleted = !widget.task.isCompleted;
-              setState(() {
-                
-              });
-            },
-            child: Container(
-              child: Icon(Icons.check),
-              decoration: BoxDecoration(
-                  color: widget.task.isCompleted ? Colors.green : Colors.white,
-                  border: Border.all(color: Colors.grey, width: 0.7),
-                  shape: BoxShape.circle),
-            ),
-          ),
-          title: Text(
-            widget.task.name,
-          ),
-        ));
+        title: widget.task.isCompleted
+            ? Text(
+                widget.task.name,
+                style: TextStyle(
+                    decoration: TextDecoration.lineThrough, color: Colors.grey),
+              )
+            : TextField(
+                minLines: 1,
+                maxLines: null,
+                textInputAction: TextInputAction.done,
+                controller: _taskNameController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                ),
+                onSubmitted: (newValue) {
+                  if (newValue.length > 2) {
+                    widget.task.name = newValue;
+                  }
+                },
+              ),
+        trailing: Text(
+          DateFormat("hh:mm a").format(widget.task.createdAt),
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+      ),
+    );
   }
 }
