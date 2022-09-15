@@ -9,7 +9,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 final locator = GetIt.instance;
 
 void setup() {
-  locator.registerSingleton<LocalStorage>(HiveLocalStroge());
+  locator.registerSingleton<LocalStorage>(MockLocalStorage());
 }
 
 Future<void> main() async {
