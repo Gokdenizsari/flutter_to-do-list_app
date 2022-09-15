@@ -1,6 +1,8 @@
 import 'dart:js';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_to_do_list_app/data/local_storage.dart';
+import 'package:flutter_to_do_list_app/main.dart';
 import 'package:flutter_to_do_list_app/models/task_model.dart';
 import 'package:flutter_to_do_list_app/widgets/task_list_item.dart';
 
@@ -13,11 +15,14 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late List<Task> _allTaks;
+
+  late LocalStorage _localStorage;
   @override
   void initState() {
     super.initState();
+    _localStorage = locator<LocalStorage>();
     _allTaks = <Task>[];
-    _allTaks.add(Task.create(name: "Try Task", createdAt: DateTime.now()));
+    _getAllTaskFromBd();
   }
 
   @override
@@ -66,6 +71,7 @@ class _MainPageState extends State<MainPage> {
                       key: Key(_listEleman.id),
                       onDismissed: (direction) {
                         _allTaks.remove(index);
+                        _localStorage.deleteTask(task: _listEleman);
                         setState(() {});
                       },
                       child: TaskItem(
@@ -98,10 +104,11 @@ class _MainPageState extends State<MainPage> {
                   Navigator.of(context).pop();
                   if (value.length > 2) {
                     DatePicker.showTimePicker(context, showSecondsColumn: false,
-                        onConfirm: (time) {
+                        onConfirm: (time) async {
                       var newAddToBeTask =
                           Task.create(name: value, createdAt: time);
                       _allTaks.add(newAddToBeTask);
+                      await _localStorage.addTasl(task: newAddToBeTask);
                       setState(() {});
                     });
                   }
@@ -110,5 +117,10 @@ class _MainPageState extends State<MainPage> {
             ),
           );
         });
+  }
+
+  void _getAllTaskFromBd() async {
+    _allTaks = await _localStorage.getAllTask();
+    setState(() {});
   }
 }
