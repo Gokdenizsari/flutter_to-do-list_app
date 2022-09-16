@@ -16,7 +16,10 @@ Future<void> setupHive() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TaskAdapter());
   var taskBox = await Hive.openBox<Task>("Tasks");
-  
+
+  for (var task in taskBox.values) {
+    if (task.createdAt.day != DateTime.now().day) taskBox.delete(task.id);
+  }
 }
 
 Future<void> main() async {
