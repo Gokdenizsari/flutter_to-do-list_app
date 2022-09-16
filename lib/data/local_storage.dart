@@ -42,15 +42,15 @@ class MockLocalStorage extends LocalStorage {
 }
 
 class HiveLocalStroge extends LocalStorage {
-  late Box<Task> _taskbox;
+  late Box<Task> _taskBox;
 
   HiveLocalStroge() {
-    _taskbox = Hive.box<Task>("Tasks");
+    _taskBox = Hive.box<Task>("Tasks");
   }
 
   @override
   Future<void> addTask({required Task task}) async {
-    await _taskbox.put(task.id, task);
+    await _taskBox.put(task.id, task);
   }
 
   @override
@@ -60,9 +60,9 @@ class HiveLocalStroge extends LocalStorage {
   }
 
   @override
-  Future<List<Task>> getAllTask()async{
+  Future<List<Task>> getAllTask() async {
     List<Task> _allTask = <Task>[];
-    _allTask = _taskbox.values.toList();
+    _allTask = _taskBox.values.toList();
     if (_allTask.length > 0) {
       _allTask.sort((Task a, Task b) => a.createdAt.compareTo(b.createdAt));
     }
@@ -70,8 +70,12 @@ class HiveLocalStroge extends LocalStorage {
   }
 
   @override
-  Future<Task?> getTask({required String id}) {
-    throw UnimplementedError();
+  Future<Task?> getTask({required String id}) async {
+    if (_taskBox.containsKey(id)) {
+      return _taskBox.get(id);
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -80,7 +84,8 @@ class HiveLocalStroge extends LocalStorage {
   }
 
   @override
-  Future<Task> updateTask({required Task task}) {
-    throw UnimplementedError();
+  Future<Task> updateTask({required Task task}) async {
+    await task.save();
+    return task;
   }
 }
