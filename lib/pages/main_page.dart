@@ -107,7 +107,7 @@ class _MainPageState extends State<MainPage> {
                         onConfirm: (time) async {
                       var newAddToBeTask =
                           Task.create(name: value, createdAt: time);
-                      _allTaks.add(newAddToBeTask);
+                      _allTaks.insert(0, newAddToBeTask);
                       await _localStorage.addTasl(task: newAddToBeTask);
                       setState(() {});
                     });
