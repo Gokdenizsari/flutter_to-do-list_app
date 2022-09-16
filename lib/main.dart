@@ -12,10 +12,19 @@ void setup() {
   locator.registerSingleton<LocalStorage>(MockLocalStorage());
 }
 
+Future<void> setupHive() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TaskAdapter());
+  var taskBox = await Hive.openBox<Task>("Tasks");
+  
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+
+  await setupHive();
 
   await Hive.initFlutter();
   Hive.registerAdapter(TaskAdapter());
